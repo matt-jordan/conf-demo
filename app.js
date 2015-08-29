@@ -43,13 +43,13 @@ ari.connect(config.uri, config.username, config.password)
 
     // Handle the evil Snoop channels whispering monkeys
     if (channel.name.substring(0, 5) === 'Snoop') {
-       channel.play({media: 'sound:tt-monkeys'})
+      channel.play({media: 'sound:tt-monkeys'})
          .then(function (playback) {
-           playback.on('PlaybackFinished', function (event, playback) {
-             channel.hangup();
-           });
-         });
-       return;
+            playback.on('PlaybackFinished', function () {
+              channel.hangup();
+            });
+          });
+      return;
     }
 
     // Not a Snoop channel; must be a normal participant
@@ -59,38 +59,33 @@ ari.connect(config.uri, config.username, config.password)
 
         if (conference) {
           return Promise.resolve(conference);
-        } else {
-          return client.bridges.list()
-            .then(function (bridges) {
-              return Promise.filter(bridges, function (candidate) {
-                return candidate.name === 'conf-demo';
-              });
-            })
-            .then(function (candidates) {
-              var candBridge = candidates[0];
-
-              // Always use the same bridge, if it is available
-              if (candBridge) {
-                return Promise.resolve(candBridge);
-              } else {
-                return client.bridges.create({type: 'mixing,dtmf_events', name: 'conf-demo'})
-                  .then(function (newBridge) {
-                    candBridge = newBridge;
-
-                    return Promise.resolve(candBridge);
-                  });
-              }
-            })
-            .then(function (_conference) {
-              conference = _conference;
-
-              return Promise.resolve(conference);
-            });
         }
+        return client.bridges.list()
+          .then(function (bridges) {
+            return Promise.filter(bridges, function (candidate) {
+              return candidate.name === 'conf-demo';
+            });
+          })
+          .then(function (candidates) {
+            var candBridge = candidates[0];
+
+            // Always use the same bridge, if it is available
+            if (candBridge) {
+              return Promise.resolve(candBridge);
+            }
+            return client.bridges.create({type: 'mixing,dtmf_events', name: 'conf-demo'})
+              .then(function (newBridge) {
+                candBridge = newBridge;
+                return Promise.resolve(candBridge);
+              });
+          })
+          .then(function (_conference) {
+            conference = _conference;
+            return Promise.resolve(conference);
+          });
       })
       .then(function () {
         channel.on('ChannelDtmfReceived', onDtmfReceived);
-
         return channel.answer();
       })
       .then(function () {

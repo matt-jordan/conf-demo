@@ -24,7 +24,6 @@
         "no-negated-in-lhs": 2,
         "no-obj-calls": 2,
         "no-regex-spaces": 1,
-        "no-reserved-keys": 1,
         "no-sparse-arrays": 2,
         "no-unreachable": 2,
         "use-isnan": 2,
@@ -96,7 +95,7 @@
         "no-unused-vars": 1,
         "no-use-before-define": 0,
 
-        "indent": 4,
+        "indent": [2, 2],
         "quotes": [1, "single", "avoid-escape"],
         "semi": 2
     },
@@ -104,9 +103,5 @@
     "env": {
         "node": true,
         "mocha": true
-    },
-
-    "globals": {
-        "cirrusServer": true
     }
 }
