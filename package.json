@@ -1,0 +1,14 @@
+{
+  "name": "conf-demo",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Conference Demo",
+  "main": "app.js",
+  "author": "Matt Jordan",
+  "license": "Apache 2.0",
+  "dependencies": {
+    "ari-client": "^0.2.1",
+    "bluebird": "^2.9.34"
+  },
+  "devDependencies": {}
+}
