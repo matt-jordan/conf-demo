@@ -6,9 +6,12 @@ var config = require('./config.json');
 
 // Note: you should provide a config file (config.json) that
 // has in it a JSON dictionary with the following:
+//   appname - the name of the app (defaults to conf-demo)
 //   uri - the URI of the Asterisk instance to connect to
 //   username - the ARI user
 //   password - the ARI user's password
+
+var appname = config.appname || 'conf-demo';
 
 ari.connect(config.uri, config.username, config.password)
 .then(function (client) {
@@ -33,7 +36,7 @@ ari.connect(config.uri, config.username, config.password)
           .then(function (variable) {
             console.log('Channel %s (%s) has been chosen for MONKEYS', variable.value, prisoner.name);
 
-            prisoner.snoopChannel({whisper: 'out', app: 'conf-demo'});
+            prisoner.snoopChannel({whisper: 'out', app: appname});
           });
       });
   }
@@ -104,8 +107,8 @@ ari.connect(config.uri, config.username, config.password)
   client.on('StasisStart', onStasisStart);
   client.on('StasisEnd', onStasisEnd);
 
-  console.log('Starting...');
-  client.start('conf-demo');
+  console.log('Starting... ' + appname);
+  client.start(appname);
 })
 .catch(function (err) {
   console.log(err);
